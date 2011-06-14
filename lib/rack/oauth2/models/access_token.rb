@@ -37,7 +37,7 @@ module Rack
 
           token ||= begin
             attributes = {
-              :code => Server.secure_random,
+              :code => Server.secure_random[0,20],
               :identity => identity,
               :scope => scope,
               :client_id => client.id
