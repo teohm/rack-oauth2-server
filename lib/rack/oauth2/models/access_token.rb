@@ -12,7 +12,7 @@ module Rack
         # Creates a new AccessToken for the given client and scope.
         def self.create_token_for(client, scope)
           attributes = {
-            :code => Server.secure_random[0,20], # sqllite3 can't query long string, why?
+            :code => Server.secure_random,
             :scope => scope,
             :client => client
           }
@@ -25,7 +25,7 @@ module Rack
 
         # Find AccessToken from token. Does not return revoked tokens.
         def self.from_token(token) # token == code??
-          first(:conditions => {:code => token, :revoked => nil})
+          first(:conditions => ["code like ? and revoked is null ", token])
         end
 
         # Get an access token (create new one if necessary).
@@ -37,7 +37,7 @@ module Rack
 
           token ||= begin
             attributes = {
-              :code => Server.secure_random[0,20],
+              :code => Server.secure_random,
               :identity => identity,
               :scope => scope,
               :client_id => client.id
