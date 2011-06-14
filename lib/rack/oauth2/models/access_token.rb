@@ -12,7 +12,7 @@ module Rack
         # Creates a new AccessToken for the given client and scope.
         def self.create_token_for(client, scope)
           attributes = {
-            :code => Server.secure_random,
+            :code => Server.secure_random[0,20], # sqllite3 can't query long string, why?
             :scope => scope,
             :client => client
           }
